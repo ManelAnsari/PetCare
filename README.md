@@ -1,4 +1,4 @@
-#PetCare
+# PetCare
 
 PetCare is a monitoring system for pets (mainly dogs and cats) that allows you to check for the health status of your pet on your smartphone while you're not around.
 
