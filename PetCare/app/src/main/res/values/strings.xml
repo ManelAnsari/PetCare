@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">PetCare</string>
+    <string name="facebook_app_id">1590346844401724</string>
+    <string name="fb_login_protocol_scheme">fb1590346844401724</string>
+    <string name="fb_login_cancel">Login a Facebook cancelado</string>
+    <string name="fb_login_error">Hubo un error al intentar conectarse a Facebook</string>
+
+    <string name="welcome">Bienvenido a PetCare!</string>
+    <string name="sign_out">Cerrar sesión</string>
+
+</resources>
