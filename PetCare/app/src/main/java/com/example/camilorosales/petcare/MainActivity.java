@@ -3,6 +3,8 @@ package com.example.camilorosales.petcare;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.telecom.Call;
 import android.view.View;
 import android.widget.Button;
@@ -15,7 +17,12 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
+
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +41,19 @@ public class MainActivity extends AppCompatActivity {
                 LoginManager.getInstance().logOut();
             }
         });
+
+        ArrayList<Pet> pets = new ArrayList<Pet>();
+        pets.add(new Pet("Tommy", Pet.DOG));
+        pets.add(new Pet("Firulais", Pet.DOG));
+        pets.add(new Pet("Garfield", Pet.CAT));
+
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyler_view);
+
+        mLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(mLayoutManager);
+
+        mAdapter = new PetAdapter(pets);
+        recyclerView.setAdapter(mAdapter);
     }
 
     private void goLoginScreen(){
