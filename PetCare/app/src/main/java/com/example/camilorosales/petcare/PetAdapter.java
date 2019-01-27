@@ -1,5 +1,6 @@
 package com.example.camilorosales.petcare;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
@@ -14,17 +15,25 @@ import java.util.List;
 public class PetAdapter extends RecyclerView.Adapter {
 
     private ArrayList<Pet> mDataset;
+    private static RecyclerViewOnItemClickListener mRecyclerViewOnItemClickListener;
 
-    public static class PetViewHolder extends RecyclerView.ViewHolder{
+    public static class PetViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public View mView;
         public PetViewHolder(View v){
             super(v);
             mView = v;
+            v.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            mRecyclerViewOnItemClickListener.onClick(v, getAdapterPosition());
         }
     }
 
-    public PetAdapter(ArrayList<Pet> dataset){
+    public PetAdapter(ArrayList<Pet> dataset, RecyclerViewOnItemClickListener recyclerViewOnItemClickListener){
         mDataset = dataset;
+        mRecyclerViewOnItemClickListener = recyclerViewOnItemClickListener;
     }
 
     @NonNull

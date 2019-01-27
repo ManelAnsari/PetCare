@@ -1,6 +1,8 @@
 package com.example.camilorosales.petcare;
 
-public class Pet {
+import java.io.Serializable;
+
+public class Pet implements Serializable {
     public static final int CAT = 0;
     public static final int DOG = 1;
 

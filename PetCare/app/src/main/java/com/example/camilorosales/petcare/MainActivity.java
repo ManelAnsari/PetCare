@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ArrayList<Pet> pets = new ArrayList<Pet>();
+        final ArrayList<Pet>  pets = new ArrayList<Pet>();
         pets.add(new Pet("Tommy", Pet.DOG));
         pets.add(new Pet("Firulais", Pet.DOG));
         pets.add(new Pet("Garfield", Pet.CAT));
@@ -52,7 +52,19 @@ public class MainActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new PetAdapter(pets);
+        mAdapter = new PetAdapter(pets, new RecyclerViewOnItemClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                //implement
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("pet", pets.get(position));
+                Intent intent = new Intent(MainActivity.this, PetDetailsActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+
+            }
+        });
         recyclerView.setAdapter(mAdapter);
     }
 
