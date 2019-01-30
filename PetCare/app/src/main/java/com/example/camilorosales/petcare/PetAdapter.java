@@ -1,20 +1,23 @@
 package com.example.camilorosales.petcare;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 public class PetAdapter extends RecyclerView.Adapter {
-
-    private ArrayList<Pet> mDataset;
+    private Context mContext;
+    private List<Pet> mDataset;
     private static RecyclerViewOnItemClickListener mRecyclerViewOnItemClickListener;
 
     public static class PetViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -31,9 +34,37 @@ public class PetAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public PetAdapter(ArrayList<Pet> dataset, RecyclerViewOnItemClickListener recyclerViewOnItemClickListener){
+    public PetAdapter(Context context, List<Pet> dataset){
+        mContext = context;
         mDataset = dataset;
-        mRecyclerViewOnItemClickListener = recyclerViewOnItemClickListener;
+        mRecyclerViewOnItemClickListener = new RecyclerViewOnItemClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("pet", mDataset.get(position));
+                Intent intent = new Intent(mContext, PetDetailsActivity.class);
+                intent.putExtras(bundle);
+                mContext.startActivity(intent);
+            }
+        };
+    }
+
+    public void update(Pet pet){
+        if (pet != null){
+            for (int i = 0; i < mDataset.size(); i++){
+                Log.d("updateDatasetAdapter", "mDataset[" + i + "]: " + mDataset.get(i).getName());
+                Log.d("updateDatasetAdapter", "pet: " + pet.getName());
+                if (mDataset.get(i).getName().equals(pet.getName())){
+                    Log.d("updateDatasetAdapter", "object is being updated");
+                    mDataset.get(i).setName(pet.getName());
+                    notifyItemChanged(i);
+                    return;
+                }
+            }
+            mDataset.add(pet);
+            notifyItemInserted(mDataset.size() - 1);
+        }
+
     }
 
     @NonNull

@@ -1,27 +1,28 @@
 package com.example.camilorosales.petcare;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.telecom.Call;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import com.facebook.AccessToken;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
+
+
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private RecyclerView.Adapter mAdapter;
+    private PetAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
@@ -42,30 +43,28 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        final ArrayList<Pet>  pets = new ArrayList<Pet>();
-        pets.add(new Pet("Tommy", Pet.DOG));
-        pets.add(new Pet("Firulais", Pet.DOG));
-        pets.add(new Pet("Garfield", Pet.CAT));
-
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyler_view);
+        RecyclerView recyclerView = findViewById(R.id.recyler_view);
 
         mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new PetAdapter(pets, new RecyclerViewOnItemClickListener() {
+
+        mAdapter = new PetAdapter(this, new ArrayList<Pet>());
+
+
+        recyclerView.setAdapter(mAdapter);
+
+        PetViewModel viewModel = ViewModelProviders.of(this).get(PetViewModel.class);
+        viewModel.getPet().observe(this, new Observer<Pet>() {
             @Override
-            public void onClick(View view, int position) {
-                //implement
-
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("pet", pets.get(position));
-                Intent intent = new Intent(MainActivity.this, PetDetailsActivity.class);
-                intent.putExtras(bundle);
-                startActivity(intent);
-
+            public void onChanged(@Nullable Pet pet) {
+                //update ui
+                Log.d("MainActivityViewModel", "pets changed");
+                mAdapter.update(pet);
             }
         });
-        recyclerView.setAdapter(mAdapter);
+
+
     }
 
     private void goLoginScreen(){
@@ -73,4 +72,6 @@ public class MainActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
+
+
 }

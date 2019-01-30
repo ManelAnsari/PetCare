@@ -3,6 +3,10 @@
     package="com.example.camilorosales.petcare">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
 
     <application
         android:allowBackup="true"
@@ -41,6 +45,8 @@
         </activity>
         <activity android:name=".LoginActivity" />
         <activity android:name=".PetDetailsActivity"></activity>
+
+        <service android:name="org.eclipse.paho.android.service.MqttService" />
     </application>
 
 </manifest>

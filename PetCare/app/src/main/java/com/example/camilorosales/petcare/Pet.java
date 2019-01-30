@@ -21,4 +21,8 @@ public class Pet implements Serializable {
     public int getTypeOfPet(){
         return mTypeOfPet;
     }
+
+    public void setName(String name){
+        mName = name;
+    }
 }
