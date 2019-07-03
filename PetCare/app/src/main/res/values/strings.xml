@@ -8,4 +8,6 @@
     <string name="welcome">Bienvenido a PetCare!</string>
     <string name="sign_out">Cerrar sesión</string>
 
+    <string name="action_log_out">Cerrar sesión</string>
+
 </resources>
