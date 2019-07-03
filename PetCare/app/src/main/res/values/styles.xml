@@ -3,22 +3,61 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
+        <item name="android:actionBarStyle">@style/AppTheme.ActionBarStyle</item>
+        <item name="actionOverflowButtonStyle">@style/AppTheme.ActionButton.Overflow</item>
+        <item name="actionButtonStyle">@style/AppTheme.ActionButton</item>
+        <item name="colorControlNormal">@color/white</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/colorPrimaryText</item>
+        <item name="android:textColorSecondary">@color/colorSecondaryText</item>
     </style>
 
-    <style name="PetIcon" parent="Theme.AppCompat.Light">
-        <item name="android:layout_width">36dp</item>
-        <item name="android:layout_height">36dp</item>
+    <style name="AppTheme.ActionBarStyle" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="background">@color/colorPrimary</item>
+        <item name="android:titleTextStyle">@style/AppTheme.ActionBar.TitleTextStyle</item>
+        <item name="android:subtitleTextStyle">@style/AppTheme.ActionBar.TitleTextStyle</item>
+        <item name="titleTextStyle">@style/AppTheme.ActionBar.TitleTextStyle</item>
+        <item name="subtitleTextStyle">@style/AppTheme.ActionBar.TitleTextStyle</item>
+    </style>
+
+    <style name="AppTheme.ActionBar.TitleTextStyle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="AppTheme.ActionButton" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:tint">@color/white</item>
+    </style>
+
+    <style name="AppTheme.ActionButton.Overflow" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:tint">@color/white</item>
+    </style>
+
+    <style name="PetIcon" parent="AppTheme">
+        <item name="android:layout_width">60dp</item>
+        <item name="android:layout_height">60dp</item>
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:layout_marginRight">10dp</item>
+        <item name="android:scaleType">centerCrop</item>
     </style>
 
-    <style name="PetName" parent="Theme.AppCompat.Light">
+    <style name="PetName" parent="AppTheme">
         <item name="android:layout_gravity">center_vertical</item>
-        <item name="android:textSize">30sp</item>
-        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/colorPrimaryText</item>
+
+    </style>
+    <style name="PetInfoPreview" parent="AppTheme">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="AppTitle">
+        <item name="android:textSize">72sp</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
 </resources>
