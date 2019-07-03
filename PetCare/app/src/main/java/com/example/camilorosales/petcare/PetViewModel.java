@@ -95,11 +95,12 @@ public class PetViewModel extends AndroidViewModel {
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
                 Log.d(TAG+"Callbacks", "A message has arrived");
-                String petName = new String(message.getPayload());
-                Log.d(TAG + "Callbacks", "petName: " + petName);
+                String jsonString = new String(message.getPayload());
 
-                Pet pet = new Pet(petName, Pet.DOG);
-                mPets.setValue(pet);
+                Pet pet = QueryUtils.parseJson(jsonString);
+                if (pet != null){
+                    mPets.setValue(pet);
+                }
             }
 
             @Override
@@ -115,11 +116,4 @@ public class PetViewModel extends AndroidViewModel {
         }
         return mPets;
     }
-
-    /*
-    private void loadPets(){
-        //do asynchronous operation to fetch mPets
-    }
-    */
-
 }

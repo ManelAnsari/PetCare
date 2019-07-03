@@ -19,8 +19,8 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="C:\Users\HP\Documents\Tesis\2x\baseline_pets_black_36dp.png" />
-                                      <entry key="outputName" value="pet_icon" />
+                                      <entry key="imageAsset" value="C:\Users\HP\Documents\Tesis\dog_place_holder_image.jpg" />
+                                      <entry key="outputName" value="dog_place_holder_image" />
                                     </map>
                                   </option>
                                 </PersistentState>
