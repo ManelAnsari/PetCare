@@ -35,4 +35,5 @@ dependencies {
     implementation 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1'
     implementation 'android.arch.lifecycle:extensions:1.1.0'
     implementation 'android.arch.lifecycle:viewmodel:1.1.0'
+    implementation 'de.hdodenhof:circleimageview:3.0.0'
 }
