@@ -4,22 +4,52 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="?android:attr/listPreferredItemHeight"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp">
-
-    <ImageView
+    android:layout_height="76dp"
+    >
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         style="@style/PetIcon"
-        android:src="@drawable/pet_icon"/>
+        tools:src="@drawable/dog_place_holder_image"
+        app:civ_border_width="2dp"
+        app:civ_border_color="#FF000000"/>
 
-    <TextView
-        android:id="@+id/pet_name"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/PetName"
-        tools:text="Pet name" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/pet_name"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="bottom"
+            style="@style/PetName"
+            tools:text="Lucas"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                style="@style/PetInfoPreview"
+                tools:text="38.5 °C"
+                tools:textColor="@color/green"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/PetInfoPreview"
+                tools:text="70 bpm"
+                tools:textColor="@color/green"/>
+        </LinearLayout>
+    </LinearLayout>
+
 
 
 </LinearLayout>
