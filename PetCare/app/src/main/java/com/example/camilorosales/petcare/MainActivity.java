@@ -12,22 +12,22 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
 
 import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 
 
+import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private PetAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
+    private PetViewModel mPetViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +36,33 @@ public class MainActivity extends AppCompatActivity {
 
         if (AccessToken.getCurrentAccessToken() == null){
             goLoginScreen();
+        } else {
+            // Get user email
+            GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+                @Override
+                public void onCompleted(JSONObject object, GraphResponse response) {
+                    Log.v("LoginActivity", response.toString());
+                    mPetViewModel = ViewModelProviders.of(
+                            MainActivity.this, new PetViewModelFactory(getApplication(), object.optString("email"))
+                    ).get(PetViewModel.class);
+
+                    mPetViewModel.getPet().observe(MainActivity.this, new Observer<Pet>() {
+                        @Override
+                        public void onChanged(@Nullable Pet pet) {
+                            //update ui
+                            Log.d("MainActivityViewModel", "pets changed");
+                            mAdapter.update(pet);
+                        }
+                    });
+                }
+            });
+
+            Bundle parameters = new Bundle();
+            parameters.putString("fields", "id, name, email, gender, birthday");
+            request.setParameters(parameters);
+            request.executeAsync();
         }
+
 
         RecyclerView recyclerView = findViewById(R.id.recyler_view);
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
@@ -52,18 +78,6 @@ public class MainActivity extends AppCompatActivity {
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, mLayoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
-
-        PetViewModel viewModel = ViewModelProviders.of(this).get(PetViewModel.class);
-        viewModel.getPet().observe(this, new Observer<Pet>() {
-            @Override
-            public void onChanged(@Nullable Pet pet) {
-                //update ui
-                Log.d("MainActivityViewModel", "pets changed");
-                mAdapter.update(pet);
-            }
-        });
-
-
     }
 
     @Override
