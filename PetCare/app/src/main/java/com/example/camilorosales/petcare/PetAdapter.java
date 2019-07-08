@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +13,8 @@ import android.widget.TextView;
 
 
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class PetAdapter extends RecyclerView.Adapter {
     private Context mContext;
@@ -79,6 +80,9 @@ public class PetAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         PetViewHolder pvh = (PetViewHolder) holder;
         View view = pvh.mView;
+
+        CircleImageView petImage = view.findViewById(R.id.pet_image);
+        petImage.setImageDrawable(this.mContext.getResources().getDrawable(R.drawable.dog_place_holder_image));
         TextView petName = view.findViewById(R.id.pet_name);
         petName.setText(mDataset.get(position).getName());
     }
