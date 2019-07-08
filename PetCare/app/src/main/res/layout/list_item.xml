@@ -9,6 +9,7 @@
     <de.hdodenhof.circleimageview.CircleImageView
         xmlns:app="http://schemas.android.com/apk/res-auto"
         style="@style/PetIcon"
+        android:id="@+id/pet_image"
         tools:src="@drawable/dog_place_holder_image"
         app:civ_border_width="2dp"
         app:civ_border_color="#FF000000"/>
