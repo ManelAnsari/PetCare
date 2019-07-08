@@ -31,13 +31,13 @@ public class PetViewModel extends AndroidViewModel {
     private int mQos;
     private final String TAG = "PetViewModel";
 
-    public PetViewModel(@NonNull Application application) {
+    public PetViewModel(@NonNull Application application, String userEmail) {
         super(application);
         mClientId = MqttClient.generateClientId();
         mClient = new MqttAndroidClient(application.getApplicationContext(), mServer, mClientId);
         mOptions = new MqttConnectOptions();
         mOptions.setMqttVersion(MqttConnectOptions.MQTT_VERSION_3_1);
-        mTopic = "sensors_info";
+        mTopic = userEmail;
         mQos = 2;
         mPets = new MutableLiveData<Pet>();
         connect(mClient);
@@ -56,7 +56,7 @@ public class PetViewModel extends AndroidViewModel {
 
                 @Override
                 public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-                    Log.d(TAG, "Connection with the mServer couldn't be stablished");
+                    Log.d(TAG, "Connection with the mServer couldn't be established");
                 }
             });
         }catch (MqttException e){
