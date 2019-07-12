@@ -60,4 +60,13 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="PetDetailsName">
+        <item name="android:textSize">36sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="PetDetailsValue">
+        <item name="android:textSize">30sp</item>
+    </style>
+
 </resources>
