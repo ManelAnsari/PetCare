@@ -44,7 +44,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginActivity" />
-        <activity android:name=".PetDetailsActivity"></activity>
+        <activity android:name=".PetDetailsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity"/>
+        </activity>
 
         <service android:name="org.eclipse.paho.android.service.MqttService" />
     </application>
