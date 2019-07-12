@@ -10,4 +10,7 @@
 
     <string name="action_log_out">Cerrar sesión</string>
 
+    <string name="temperature">Temperatura</string>
+    <string name="heart_rate">Frecuencia cardiaca</string>
+
 </resources>
