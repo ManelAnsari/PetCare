@@ -6,15 +6,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".PetDetailsActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="10dp">
 
     <TextView
-        android:id="@+id/pet_details_name"
+        style="@style/PetDetailsValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
-        tools:text="Pet Name"/>
+        android:text="@string/temperature" />
 
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/temperature_chart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
 
+    </com.github.mikephil.charting.charts.LineChart>
 
+    <TextView
+        style="@style/PetDetailsValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/heart_rate" />
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/hear_rate_chart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+    </com.github.mikephil.charting.charts.LineChart>
 </LinearLayout>
