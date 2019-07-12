@@ -30,12 +30,14 @@
             />
 
         <LinearLayout
+            android:id="@+id/pet_preview"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/pet_temperature"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
@@ -43,6 +45,7 @@
                 tools:text="38.5 °C"
                 tools:textColor="@color/green"/>
             <TextView
+                android:id="@+id/pet_heart_rate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/PetInfoPreview"
