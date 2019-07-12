@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
@@ -57,7 +58,8 @@ public class PetAdapter extends RecyclerView.Adapter {
                 Log.d("updateDatasetAdapter", "pet: " + pet.getName());
                 if (mDataset.get(i).getName().equals(pet.getName())){
                     Log.d("updateDatasetAdapter", "object is being updated");
-                    mDataset.get(i).setName(pet.getName());
+                    mDataset.get(i).setTemperature(pet.getTemperature());
+                    mDataset.get(i).setHeartRate(pet.getTemperature());
                     notifyItemChanged(i);
                     return;
                 }
@@ -84,6 +86,11 @@ public class PetAdapter extends RecyclerView.Adapter {
         CircleImageView petImage = view.findViewById(R.id.pet_image);
         petImage.setImageDrawable(this.mContext.getResources().getDrawable(R.drawable.dog_place_holder_image));
         TextView petName = view.findViewById(R.id.pet_name);
+        TextView petTemperature = view.findViewById(R.id.pet_temperature);
+        TextView petHeartRate = view.findViewById(R.id.pet_heart_rate);
+
+        petTemperature.setText(mDataset.get(position).getTemperature() + "°C");
+        petHeartRate.setText(mDataset.get(position).getHeartRate() + " bpm");
         petName.setText(mDataset.get(position).getName());
     }
 
