@@ -20,6 +20,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class PetAdapter extends RecyclerView.Adapter {
     private Context mContext;
     private List<Pet> mDataset;
+    private String mEmail;
     private static RecyclerViewOnItemClickListener mRecyclerViewOnItemClickListener;
 
     public static class PetViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -44,6 +45,7 @@ public class PetAdapter extends RecyclerView.Adapter {
             public void onClick(View view, int position) {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("pet", mDataset.get(position));
+                bundle.putString("email", mEmail);
                 Intent intent = new Intent(mContext, PetDetailsActivity.class);
                 intent.putExtras(bundle);
                 mContext.startActivity(intent);
@@ -68,6 +70,10 @@ public class PetAdapter extends RecyclerView.Adapter {
             notifyItemInserted(mDataset.size() - 1);
         }
 
+    }
+
+    public void setEmail(String email) {
+        this.mEmail = email;
     }
 
     @NonNull

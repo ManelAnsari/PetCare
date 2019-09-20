@@ -3,7 +3,10 @@ package com.example.camilorosales.petcare;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.Loader;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.app.LoaderManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -19,15 +22,18 @@ import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<Pet>> {
 
     private PetAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private PetViewModel mPetViewModel;
+    private String mUserEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +48,12 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onCompleted(JSONObject object, GraphResponse response) {
                     Log.v("LoginActivity", response.toString());
+                    mUserEmail = object.optString("email");
+                    mAdapter.setEmail(mUserEmail);
                     mPetViewModel = ViewModelProviders.of(
-                            MainActivity.this, new PetViewModelFactory(getApplication(), object.optString("email"))
+                            MainActivity.this, new PetViewModelFactory(getApplication(), mUserEmail)
                     ).get(PetViewModel.class);
+                    getLoaderManager().initLoader(0, null, MainActivity.this);
 
                     mPetViewModel.getPet().observe(MainActivity.this, new Observer<Pet>() {
                         @Override
@@ -108,4 +117,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public Loader<ArrayList<Pet>> onCreateLoader(int id, Bundle args) {
+        try {
+            JSONObject bodyJson = new JSONObject();
+            JSONObject ownerJson = new JSONObject();
+            Log.d("MainActivity", "email: " + this.mUserEmail);
+            ownerJson.put("email", this.mUserEmail);
+            Log.d("MainActivity", ownerJson.toString());
+            bodyJson.put("owner", ownerJson);
+            String bodyString = bodyJson.toString();
+            Log.d("MainActivity", bodyString);
+            return new PetLoader(MainActivity.this, "http://167.86.117.236:3001/api/getPets", bodyJson);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public void onLoadFinished(android.content.Loader<ArrayList<Pet>> loader, ArrayList<Pet> pets) {
+        for (Pet pet : pets) {
+            this.mAdapter.update(pet);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(android.content.Loader<ArrayList<Pet>> loader) {
+
+    }
 }
