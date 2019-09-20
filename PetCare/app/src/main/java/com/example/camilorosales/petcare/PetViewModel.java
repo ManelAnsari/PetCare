@@ -18,9 +18,6 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class PetViewModel extends AndroidViewModel {
     private MutableLiveData<Pet> mPets;
     private MqttAndroidClient mClient;
@@ -97,7 +94,7 @@ public class PetViewModel extends AndroidViewModel {
                 Log.d(TAG+"Callbacks", "A message has arrived");
                 String jsonString = new String(message.getPayload());
 
-                Pet pet = QueryUtils.parseJson(jsonString);
+                Pet pet = QueryUtils.parseJsonPet(jsonString);
                 if (pet != null){
                     mPets.setValue(pet);
                 }
