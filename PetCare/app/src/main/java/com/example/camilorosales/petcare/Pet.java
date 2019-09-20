@@ -1,5 +1,8 @@
 package com.example.camilorosales.petcare;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
 
 public class Pet implements Serializable {
@@ -10,10 +13,12 @@ public class Pet implements Serializable {
     private int mTypeOfPet;
     private float mTemperature;
     private float mHeartRate;
+    private long mTime; // Time of the last sample taken
 
     public Pet(String name, int typeOfPet){
         mName = name;
         mTypeOfPet = typeOfPet;
+        mTime = -1;
     }
 
     public Pet(String name, int typeOfPet, float temperature, float hearRate) {
@@ -21,6 +26,14 @@ public class Pet implements Serializable {
         mTypeOfPet = typeOfPet;
         mTemperature = temperature;
         mHeartRate = hearRate;
+    }
+
+    public Pet(String name, int typeOfPet, float temperature, float hearRate, long time) {
+        mName = name;
+        mTypeOfPet = typeOfPet;
+        mTemperature = temperature;
+        mHeartRate = hearRate;
+        mTime = time;
     }
 
     public String getName(){
@@ -49,5 +62,20 @@ public class Pet implements Serializable {
 
     public void setHeartRate(float mHeartRate) {
         this.mHeartRate = mHeartRate;
+    }
+
+    public long getTime() {
+        return this.mTime;
+    }
+
+    public void setTime(long time) {
+        this.mTime = time;
+    }
+
+    public JSONObject toJson() throws JSONException {
+        JSONObject json = new JSONObject();
+        json.put("name", this.mName);
+        json.put("typeOfPet", this.mTypeOfPet);
+        return json;
     }
 }
