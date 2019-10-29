@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                         public void onChanged(@Nullable Pet pet) {
                             //update ui
                             Log.d("MainActivityViewModel", "pets changed");
+                            Log.d("MainActivityViewModel", "Temperature: " + pet.getTemperature());
+                            Log.d("MainActivityViewModel", "Heart rate: " + pet.getHeartRate());
                             mAdapter.update(pet);
                         }
                     });

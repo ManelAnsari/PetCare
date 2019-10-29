@@ -2,8 +2,11 @@ package com.example.camilorosales.petcare;
 
 import android.app.DatePickerDialog;
 import android.app.LoaderManager;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.Loader;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,6 +23,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,19 +45,47 @@ public class PetDetailsActivity extends AppCompatActivity implements LoaderManag
     private EditText mStartDate;
     private EditText mEndDate;
     private Button mUpdate;
-    private long mStartTimeStamp;
-    private long mEndTimeStamp;
+    private long mStartTimeStamp = -1;
+    private long mEndTimeStamp = -1;
+    private PetViewModel mPetViewModel;
+    private long mMinX;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pet_details);
+        this.mMinX = -1;
 
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         this.mPet = (Pet) bundle.getSerializable("pet");
         this.mUserEmail = bundle.getString("email");
         getLoaderManager().initLoader(0, null, this);
+        mPetViewModel = ViewModelProviders.of(
+                this, new PetViewModelFactory(getApplication(), mUserEmail)
+        ).get(PetViewModel.class);
+
+        mPetViewModel.getPet().observe(this, new Observer<Pet>() {
+            @Override
+            public void onChanged(@Nullable Pet pet) {
+                //update ui
+                Log.d("PetDetailsActivity", "New info");
+                Log.d("PetDetailsActivity", "Temperature: " + pet.getTemperature());
+                Log.d("PetDetailsActivity", "Heart rate: " + pet.getHeartRate());
+                Log.d("PetDetailsActivity", "Pet name: " + pet.getName());
+                Log.d("PetDetailsActivity", "My pet name: " + mPet.getName());
+                if (pet.getName().equals(mPet.getName())) {
+                    // update line data
+                    Log.d("PetDetailsActivity", "Same pet");
+                    pet.setTime(new Date().getTime());
+                    if ((mStartTimeStamp == -1 || mStartTimeStamp <= pet.getTime())
+                            && (mEndTimeStamp == -1 || mEndTimeStamp >= pet.getTime())) {
+                        Log.d("PetDetailsActivity", "Updating chart");
+                        updateCharts(pet);
+                    }
+                }
+            }
+        });
 
         this.mStartDate = (EditText) findViewById(R.id.start_date);
         this.mEndDate = (EditText) findViewById(R.id.end_date);
@@ -100,11 +132,11 @@ public class PetDetailsActivity extends AppCompatActivity implements LoaderManag
         // Set the xAxis position to bottom. Default is top
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setValueFormatter(new ValueFormatter() {
-            private final SimpleDateFormat mFormat = new SimpleDateFormat("dd MMM HH:mm", Locale.ENGLISH);
+            private final SimpleDateFormat mFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ENGLISH);
             @Override
             public String getFormattedValue(float value) {
                 long millis = (long) value;
-                return mFormat.format(new Date(millis));
+                return mFormat.format(new Date(millis + mMinX));
             }
         });
 
@@ -132,10 +164,9 @@ public class PetDetailsActivity extends AppCompatActivity implements LoaderManag
         LineDataSet lineDataSet = new LineDataSet(lineEntries, getString(R.string.temperature));
         lineDataSet.setColor(ContextCompat.getColor(this, R.color.colorPrimary));
         lineDataSet.setValueTextColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
-        lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+        lineDataSet.setMode(LineDataSet.Mode.LINEAR);
         lineDataSet.setDrawValues(true);
         lineDataSet.setDrawCircles(true);
-
         LineData lineData = new LineData(lineDataSet);
         return lineData;
     }
@@ -144,7 +175,7 @@ public class PetDetailsActivity extends AppCompatActivity implements LoaderManag
         LineDataSet lineDataSet = new LineDataSet(lineEntries, getString(R.string.heart_rate));
         lineDataSet.setColor(ContextCompat.getColor(this, R.color.colorPrimary));
         lineDataSet.setValueTextColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
-        lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+        lineDataSet.setMode(LineDataSet.Mode.LINEAR);
         lineDataSet.setDrawValues(true);
         lineDataSet.setDrawCircles(true);
 
@@ -179,13 +210,26 @@ public class PetDetailsActivity extends AppCompatActivity implements LoaderManag
         ArrayList<Entry> temperatureEntries = new ArrayList<Entry>();
         ArrayList<Entry> heartBeatEntries = new ArrayList<Entry>();
         Log.d("PetDetailsActivity", "Data received");
+        long minX;
+        long maxX;
+        if (pets.size() > 0) {
+            minX = pets.get(0).getTime();
+            maxX = pets.get(pets.size() - 1).getTime();
+        }
+        else {
+            minX = 0;
+            maxX = 0;
+        }
+        this.mMinX = minX;
         SimpleDateFormat format = new SimpleDateFormat("dd MMM HH:mm", Locale.ENGLISH);
         for (Pet pet : pets) {
             Log.v("PetDetailsActivity", "Adding temperature: (" + pet.getTime() + ", " + pet.getTemperature() + ")");
             Log.v("PetDetailsActivity", "Adding heart rate: (" + pet.getTime() + ", " + pet.getHeartRate() + ")");
             Log.v("PetDetailsActivity", "Timestamp: " + pet.getTime() + " -> " + format.format(new Date(pet.getTime())));
-            temperatureEntries.add(new Entry(pet.getTime(), pet.getTemperature()));
-            heartBeatEntries.add(new Entry(pet.getTime(), pet.getHeartRate()));
+            float f = (float) pet.getTime();
+            Log.v("PetDetailsActivity", "Actual timestamp: " + f);
+            temperatureEntries.add(new Entry(pet.getTime() - this.mMinX, pet.getTemperature()));
+            heartBeatEntries.add(new Entry(pet.getTime() - this.mMinX, pet.getHeartRate()));
         }
 
         this.mTemperatureChart.setData(this.getTemperatureData(this.mPet, temperatureEntries));
@@ -255,5 +299,49 @@ public class PetDetailsActivity extends AppCompatActivity implements LoaderManag
         }, year, month, day);
 
         dialog.show();
+    }
+
+    public void updateCharts(Pet pet) {
+        LineData tempData = this.mTemperatureChart.getData();
+        LineData heartData = this.mHeartRateChart.getData();
+
+        if (tempData == null) {
+            tempData = new LineData();
+            this.mTemperatureChart.setData(tempData);
+        }
+
+        if (heartData == null) {
+            heartData = new LineData();
+            this.mHeartRateChart.setData(heartData);
+        }
+
+
+
+
+        ILineDataSet tempSet = tempData.getDataSetByIndex(0);
+        ILineDataSet heartSet = heartData.getDataSetByIndex(0);
+
+
+        int prev = tempData.getEntryCount();
+        if (pet.getTime() == -1) pet.setTime(new Date().getTime());
+        if (this.mMinX == -1) {
+            this.mMinX = pet.getTime();
+        }
+        Log.d("PetDetailsActivity", "min x: " + this.mMinX);
+        tempData.addEntry(new Entry(pet.getTime() - this.mMinX, pet.getTemperature()), 0);
+        heartData.addEntry(new Entry(pet.getTime() - this.mMinX, pet.getTemperature()), 0);
+
+        tempData.notifyDataChanged();
+
+        heartData.notifyDataChanged();
+        Log.d("PetDetailsActivity", "prev temp count: " + prev);
+        Log.d("PetDetailsActivity", "curr temp count: " + tempData.getEntryCount());
+        this.mTemperatureChart.notifyDataSetChanged();
+        this.mHeartRateChart.notifyDataSetChanged();
+        this.mTemperatureChart.invalidate();
+        this.mHeartRateChart.invalidate();
+        Log.d("PetDetailsActivity", "min x temp: " + tempData.getXMin());
+        Log.d("PetDetailsActivity", "min x heart: " + heartData.getXMin());
+        Log.d("PetDetailsActivity", "Added new entry");
     }
 }

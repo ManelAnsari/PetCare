@@ -36,6 +36,8 @@ public final class QueryUtils {
             int typeOfPet = jsonObject.getInt("typeOfPet");
             float temperature = (float) jsonObject.getDouble("temperature");
             float heartRate = (float) jsonObject.getDouble("heartRate");
+            Log.d(TAG + "/parseJsonPet", "Temperature: " + temperature);
+            Log.d(TAG + "/parseJsonPet", "Heart rate: " + heartRate);
             pet = new Pet(petName, typeOfPet, temperature, heartRate);
         } catch (JSONException e) {
             Log.e(TAG, "Couldn't parse json");
@@ -71,7 +73,7 @@ public final class QueryUtils {
                 String name = jsonPetObject.getString("name");
                 int typeOfPet = jsonPetObject.getInt("typeOfPet");
                 float temperature = (float) jsonObject.getDouble("temperature");
-                float heartBeat = (float) jsonObject.getDouble("heartBeat");
+                float heartBeat = (float) jsonObject.getDouble("heartRate");
                 long time = jsonObject.getLong("date");
                 petInfo.add(new Pet(name, typeOfPet, temperature, heartBeat, time));
             }

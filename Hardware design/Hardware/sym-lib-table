@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name SEN-11574)(type Legacy)(uri ${KICAD_SYMBOL_DIR}/SEN-11574.lib)(options "")(descr "")(disabled))
+)

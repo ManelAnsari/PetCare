@@ -61,7 +61,7 @@ public class PetAdapter extends RecyclerView.Adapter {
                 if (mDataset.get(i).getName().equals(pet.getName())){
                     Log.d("updateDatasetAdapter", "object is being updated");
                     mDataset.get(i).setTemperature(pet.getTemperature());
-                    mDataset.get(i).setHeartRate(pet.getTemperature());
+                    mDataset.get(i).setHeartRate(pet.getHeartRate());
                     notifyItemChanged(i);
                     return;
                 }
